@@ -1,0 +1,34 @@
+{
+    "name": "projeto/gerenciamento-projetos-php-final",
+    "autoload": {
+        "psr-4": {
+            "model\\": "src/model/",
+            "dao\\": "src/dao/",
+            "utils\\": "src/utils/",
+            "enums\\": "src/enums/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "test\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Henrique Pivetti"
+        },
+        {
+            "name": "Gabriela Brescovites"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6",
+        "doctrine/orm": "^3.6",
+        "symfony/cache": "^7.4",
+        "symfony/console": "^7.4",
+        "doctrine/dbal": "^4.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    }
+}
