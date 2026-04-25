@@ -2,10 +2,10 @@
 
 namespace test\dao;
 
-use dao\RiscoDao;
+use dao\RiscoDAO;
 use model\Risco;
 
-class RiscoDaoTest extends DaoTestCase
+class RiscoDAOTest extends DAOTestCase
 {
     public function testCrudRisco(): void
     {
@@ -24,20 +24,20 @@ class RiscoDaoTest extends DaoTestCase
             ->setEstrategiaResposta('Transferir')
             ->setPlanoMitigacao('Plano ' . $token);
 
-        $riscoSalvo = RiscoDao::salvar($risco);
+        $riscoSalvo = RiscoDAO::salvar($risco);
         $this->trackEntity($riscoSalvo);
 
         $this->assertNotNull($riscoSalvo->getId());
 
         $this->clearEntityManager();
-        $riscoBuscado = RiscoDao::buscarId($riscoSalvo);
+        $riscoBuscado = RiscoDAO::buscarId($riscoSalvo);
         $this->assertInstanceOf(Risco::class, $riscoBuscado);
         $this->assertSame('Risco ' . $token, $riscoBuscado->getTitulo());
 
-        $idsListados = array_map(static fn (Risco $item): int => $item->getId(), RiscoDao::listar());
+        $idsListados = array_map(static fn (Risco $item): int => $item->getId(), RiscoDAO::listar());
         $this->assertContains($riscoSalvo->getId(), $idsListados);
 
-        $buscaPorStatus = RiscoDao::buscarStatus('IDENTIFICADO');
+        $buscaPorStatus = RiscoDAO::buscarStatus('IDENTIFICADO');
         $idsPorStatus = array_map(static fn (Risco $item): int => $item->getId(), $buscaPorStatus);
         $this->assertContains($riscoSalvo->getId(), $idsPorStatus);
 
@@ -45,19 +45,19 @@ class RiscoDaoTest extends DaoTestCase
             ->setStatus('MITIGADO')
             ->setProbabilidade(1)
             ->setCriticidade(5);
-        RiscoDao::salvar($riscoBuscado);
+        RiscoDAO::salvar($riscoBuscado);
 
         $this->clearEntityManager();
-        $riscoAtualizado = RiscoDao::buscarId($riscoSalvo);
+        $riscoAtualizado = RiscoDAO::buscarId($riscoSalvo);
         $this->assertInstanceOf(Risco::class, $riscoAtualizado);
         $this->assertSame('MITIGADO', $riscoAtualizado->getStatus());
         $this->assertSame(1, $riscoAtualizado->getProbabilidade());
         $this->assertSame(5, $riscoAtualizado->getCriticidade());
 
-        RiscoDao::deletar($riscoAtualizado);
+        RiscoDAO::deletar($riscoAtualizado);
         $this->untrackEntity($riscoSalvo);
 
         $this->clearEntityManager();
-        $this->assertNull(RiscoDao::buscarId($riscoSalvo));
+        $this->assertNull(RiscoDAO::buscarId($riscoSalvo));
     }
 }

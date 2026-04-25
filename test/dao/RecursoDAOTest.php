@@ -2,10 +2,10 @@
 
 namespace test\dao;
 
-use dao\RecursoDao;
+use dao\RecursoDAO;
 use model\Recurso;
 
-class RecursoDaoTest extends DaoTestCase
+class RecursoDAOTest extends DAOTestCase
 {
     public function testCrudRecurso(): void
     {
@@ -20,39 +20,39 @@ class RecursoDaoTest extends DaoTestCase
             ->setQuantidade(3)
             ->setCustoUnitario(199.99);
 
-        $recursoSalvo = RecursoDao::salvar($recurso);
+        $recursoSalvo = RecursoDAO::salvar($recurso);
         $this->trackEntity($recursoSalvo);
 
         $this->assertNotNull($recursoSalvo->getId());
 
         $this->clearEntityManager();
-        $recursoBuscado = RecursoDao::buscarId($recursoSalvo);
+        $recursoBuscado = RecursoDAO::buscarId($recursoSalvo);
         $this->assertInstanceOf(Recurso::class, $recursoBuscado);
         $this->assertSame('Recurso ' . $token, $recursoBuscado->getNome());
 
-        $idsListados = array_map(static fn (Recurso $item): int => $item->getId(), RecursoDao::listar());
+        $idsListados = array_map(static fn (Recurso $item): int => $item->getId(), RecursoDAO::listar());
         $this->assertContains($recursoSalvo->getId(), $idsListados);
 
-        $buscaPorNome = RecursoDao::buscarNome('Recurso ' . $token);
+        $buscaPorNome = RecursoDAO::buscarNome('Recurso ' . $token);
         $this->assertCount(1, $buscaPorNome);
 
         $recursoBuscado
             ->setTipo('SERVICO')
             ->setQuantidade(5)
             ->setCustoUnitario(250.50);
-        RecursoDao::salvar($recursoBuscado);
+        RecursoDAO::salvar($recursoBuscado);
 
         $this->clearEntityManager();
-        $recursoAtualizado = RecursoDao::buscarId($recursoSalvo);
+        $recursoAtualizado = RecursoDAO::buscarId($recursoSalvo);
         $this->assertInstanceOf(Recurso::class, $recursoAtualizado);
         $this->assertSame('SERVICO', $recursoAtualizado->getTipo());
         $this->assertSame(5, $recursoAtualizado->getQuantidade());
         $this->assertSame(250.50, $recursoAtualizado->getCustoUnitario());
 
-        RecursoDao::deletar($recursoAtualizado);
+        RecursoDAO::deletar($recursoAtualizado);
         $this->untrackEntity($recursoSalvo);
 
         $this->clearEntityManager();
-        $this->assertNull(RecursoDao::buscarId($recursoSalvo));
+        $this->assertNull(RecursoDAO::buscarId($recursoSalvo));
     }
 }

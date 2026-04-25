@@ -2,10 +2,10 @@
 
 namespace test\dao;
 
-use dao\UsuarioDao;
+use dao\UsuarioDAO;
 use model\Usuario;
 
-class UsuarioDaoTest extends DaoTestCase
+class UsuarioDAOTest extends DAOTestCase
 {
     public function testCrudUsuario(): void
     {
@@ -18,39 +18,39 @@ class UsuarioDaoTest extends DaoTestCase
             ->setPerfil('ANALISTA')
             ->setTelefone('11912345678');
 
-        $usuarioSalvo = UsuarioDao::salvar($usuario);
+        $usuarioSalvo = UsuarioDAO::salvar($usuario);
         $this->trackEntity($usuarioSalvo);
 
         $this->assertNotNull($usuarioSalvo->getId());
 
         $this->clearEntityManager();
-        $usuarioBuscado = UsuarioDao::buscarId($usuarioSalvo);
+        $usuarioBuscado = UsuarioDAO::buscarId($usuarioSalvo);
         $this->assertInstanceOf(Usuario::class, $usuarioBuscado);
         $this->assertSame($token . '@teste.local', $usuarioBuscado->getEmail());
 
-        $idsListados = array_map(static fn (Usuario $item): int => $item->getId(), UsuarioDao::listar());
+        $idsListados = array_map(static fn (Usuario $item): int => $item->getId(), UsuarioDAO::listar());
         $this->assertContains($usuarioSalvo->getId(), $idsListados);
 
-        $buscaPorEmail = UsuarioDao::buscarEmail($token . '@teste.local');
+        $buscaPorEmail = UsuarioDAO::buscarEmail($token . '@teste.local');
         $this->assertCount(1, $buscaPorEmail);
 
         $usuarioBuscado
             ->setNome('Usuario Atualizado ' . $token)
             ->setPerfil('GERENTE_PROJETO')
             ->setTelefone('11987654321');
-        UsuarioDao::salvar($usuarioBuscado);
+        UsuarioDAO::salvar($usuarioBuscado);
 
         $this->clearEntityManager();
-        $usuarioAtualizado = UsuarioDao::buscarId($usuarioSalvo);
+        $usuarioAtualizado = UsuarioDAO::buscarId($usuarioSalvo);
         $this->assertInstanceOf(Usuario::class, $usuarioAtualizado);
         $this->assertSame('Usuario Atualizado ' . $token, $usuarioAtualizado->getNome());
         $this->assertSame('GERENTE_PROJETO', $usuarioAtualizado->getPerfil());
         $this->assertSame('11987654321', $usuarioAtualizado->getTelefone());
 
-        UsuarioDao::deletar($usuarioAtualizado);
+        UsuarioDAO::deletar($usuarioAtualizado);
         $this->untrackEntity($usuarioSalvo);
 
         $this->clearEntityManager();
-        $this->assertNull(UsuarioDao::buscarId($usuarioSalvo));
+        $this->assertNull(UsuarioDAO::buscarId($usuarioSalvo));
     }
 }

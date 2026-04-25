@@ -2,11 +2,11 @@
 
 namespace dao;
 
-use model\Recurso;
+use model\Projeto;
 
-class RecursoDao extends GenericDAO
+class ProjetoDAO extends GenericDAO
 {
-    protected static string $modelClass = Recurso::class;
+    protected static string $modelClass = Projeto::class;
 
     public static function buscarNome(string $nome): array
     {

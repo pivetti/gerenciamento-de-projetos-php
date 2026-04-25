@@ -4,7 +4,7 @@ namespace dao;
 
 use model\Risco;
 
-class RiscoDao extends GenericDAO
+class RiscoDAO extends GenericDAO
 {
     protected static string $modelClass = Risco::class;
 

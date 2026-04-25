@@ -2,11 +2,11 @@
 
 namespace test\dao;
 
-use dao\ProjetoDao;
+use dao\ProjetoDAO;
 use DateTime;
 use model\Projeto;
 
-class ProjetoDaoTest extends DaoTestCase
+class ProjetoDAOTest extends DAOTestCase
 {
     public function testCrudProjeto(): void
     {
@@ -23,39 +23,39 @@ class ProjetoDaoTest extends DaoTestCase
             ->setOrcamentoPrevisto(2200.90)
             ->setPercentualConcluido(15);
 
-        $projetoSalvo = ProjetoDao::salvar($projeto);
+        $projetoSalvo = ProjetoDAO::salvar($projeto);
         $this->trackEntity($projetoSalvo);
 
         $this->assertNotNull($projetoSalvo->getId());
 
         $this->clearEntityManager();
-        $projetoBuscado = ProjetoDao::buscarId($projetoSalvo);
+        $projetoBuscado = ProjetoDAO::buscarId($projetoSalvo);
         $this->assertInstanceOf(Projeto::class, $projetoBuscado);
         $this->assertSame('Projeto ' . $token, $projetoBuscado->getNome());
 
-        $idsListados = array_map(static fn (Projeto $item): int => $item->getId(), ProjetoDao::listar());
+        $idsListados = array_map(static fn (Projeto $item): int => $item->getId(), ProjetoDAO::listar());
         $this->assertContains($projetoSalvo->getId(), $idsListados);
 
-        $buscaPorNome = ProjetoDao::buscarNome('Projeto ' . $token);
+        $buscaPorNome = ProjetoDAO::buscarNome('Projeto ' . $token);
         $this->assertCount(1, $buscaPorNome);
 
         $projetoBuscado
             ->setStatus('EM_ANDAMENTO')
             ->setPrioridade('ALTA')
             ->setPercentualConcluido(80);
-        ProjetoDao::salvar($projetoBuscado);
+        ProjetoDAO::salvar($projetoBuscado);
 
         $this->clearEntityManager();
-        $projetoAtualizado = ProjetoDao::buscarId($projetoSalvo);
+        $projetoAtualizado = ProjetoDAO::buscarId($projetoSalvo);
         $this->assertInstanceOf(Projeto::class, $projetoAtualizado);
         $this->assertSame('EM_ANDAMENTO', $projetoAtualizado->getStatus());
         $this->assertSame('ALTA', $projetoAtualizado->getPrioridade());
         $this->assertSame(80, $projetoAtualizado->getPercentualConcluido());
 
-        ProjetoDao::deletar($projetoAtualizado);
+        ProjetoDAO::deletar($projetoAtualizado);
         $this->untrackEntity($projetoSalvo);
 
         $this->clearEntityManager();
-        $this->assertNull(ProjetoDao::buscarId($projetoSalvo));
+        $this->assertNull(ProjetoDAO::buscarId($projetoSalvo));
     }
 }

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Alteracoes no Projeto</title>
+    <style>
+        :root {
+            --border: #7b7b7b;
+            --text: #111;
+            --bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .documento {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            vertical-align: top;
+            font-size: 14px;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+        .titulo,
+        .autores {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .titulo {
+            font-size: 18px;
+        }
+
+        .autores {
+            font-size: 15px;
+        }
+
+        .cabecalho {
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .arquivo {
+            width: 20%;
+        }
+
+        .alteracao {
+            width: 30%;
+        }
+
+        .estado {
+            width: 25%;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+            }
+
+            .documento {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="documento">
+        <table>
+            <tr>
+                <th colspan="4" class="titulo">REGISTRO DE ALTERACOES NO PROJETO GERENCIAMENTO DE PROJETOS PHP</th>
+            </tr>
+            <tr>
+                <th colspan="4" class="autores">Henrique Pivetti e Gabriela Brescovites</th>
+            </tr>
+            <tr>
+                <th class="cabecalho arquivo">ARQUIVO</th>
+                <th class="cabecalho alteracao">O QUE FOI ALTERADO</th>
+                <th class="cabecalho estado">ESTADO ANTERIOR</th>
+                <th class="cabecalho estado">ESTADO ATUAL</th>
+            </tr>
+            <tr>
+                <td><code>src/dao/AtividadeDAO.php</code><br><code>src/dao/CustoDAO.php</code><br><code>src/dao/ParticipanteDAO.php</code><br><code>src/dao/ProjetoDAO.php</code><br><code>src/dao/RecursoDAO.php</code><br><code>src/dao/RiscoDAO.php</code><br><code>src/dao/UsuarioDAO.php</code></td>
+                <td>Padronizacao dos nomes das classes DAO com a sigla toda em maiusculas.</td>
+                <td><code>class AtividadeDao extends GenericDAO</code><br><code>class CustoDao extends GenericDAO</code><br><code>...</code></td>
+                <td><code>class AtividadeDAO extends GenericDAO</code><br><code>class CustoDAO extends GenericDAO</code><br><code>...</code></td>
+            </tr>
+            <tr>
+                <td><code>test/dao/AtividadeDAOTest.php</code><br><code>test/dao/CustoDAOTest.php</code><br><code>test/dao/ParticipanteDAOTest.php</code><br><code>test/dao/ProjetoDAOTest.php</code><br><code>test/dao/RecursoDAOTest.php</code><br><code>test/dao/RiscoDAOTest.php</code><br><code>test/dao/UsuarioDAOTest.php</code></td>
+                <td>Padronizacao dos nomes dos testes de DAO e atualizacao das referencias para as classes renomeadas.</td>
+                <td><code>use dao\AtividadeDao;</code><br><code>class AtividadeDaoTest extends DaoTestCase</code><br><code>AtividadeDao::salvar(...)</code></td>
+                <td><code>use dao\AtividadeDAO;</code><br><code>class AtividadeDAOTest extends DAOTestCase</code><br><code>AtividadeDAO::salvar(...)</code></td>
+            </tr>
+            <tr>
+                <td><code>test/dao/DAOTestCase.php</code></td>
+                <td>Padronizacao do nome da classe base dos testes DAO.</td>
+                <td><code>abstract class DaoTestCase extends TestCase</code></td>
+                <td><code>abstract class DAOTestCase extends TestCase</code></td>
+            </tr>
+            <tr>
+                <td><code>.htaccess</code></td>
+                <td>Criei regras para bloquear o acesso direto pela raiz do projeto e permitir apenas o fluxo dentro da pasta <code>/public</code>.</td>
+                <td><code># Estrutura simplificada para foco em modelagem e testes.</code></td>
+                <td><code>RewriteRule ^public(?:/.*)?$ - [L]</code><br><code>RewriteRule ^ - [F,L]</code></td>
+            </tr>
+            <tr>
+                <td><code>index.php</code></td>
+                <td>Remocao do arquivo de entrada na raiz do projeto.</td>
+                <td><code>echo 'Projeto focado em modelagem, Doctrine e testes.';</code></td>
+                <td>Arquivo removido. O ponto de entrada deixou de existir na raiz.</td>
+            </tr>
+            <tr>
+                <td><code>public/index.php</code></td>
+                <td>Criacao do novo ponto de entrada da aplicacao dentro da pasta publica.</td>
+                <td>Arquivo inexistente.</td>
+                <td><code>echo 'Projeto focado em modelagem, Doctrine e testes.';</code></td>
+            </tr>
+            <tr>
+                <td><code>public/.htaccess</code></td>
+                <td>Criacao da configuracao local da pasta publica para manter o <code>index.php</code> como front controller.</td>
+                <td>Arquivo inexistente.</td>
+                <td><code>DirectoryIndex index.php</code><br><code>RewriteRule ^ index.php [L]</code></td>
+            </tr>
+        </table>
+    </main>
+</body>
+</html>

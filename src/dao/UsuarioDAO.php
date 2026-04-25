@@ -4,7 +4,7 @@ namespace dao;
 
 use model\Usuario;
 
-class UsuarioDao extends GenericDAO
+class UsuarioDAO extends GenericDAO
 {
     protected static string $modelClass = Usuario::class;
 

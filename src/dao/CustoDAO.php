@@ -4,7 +4,7 @@ namespace dao;
 
 use model\Custo;
 
-class CustoDao extends GenericDAO
+class CustoDAO extends GenericDAO
 {
     protected static string $modelClass = Custo::class;
 

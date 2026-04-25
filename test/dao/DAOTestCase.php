@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 use utils\Conexao;
 
-abstract class DaoTestCase extends TestCase
+abstract class DAOTestCase extends TestCase
 {
     protected EntityManager $entityManager;
 

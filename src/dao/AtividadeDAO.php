@@ -4,7 +4,7 @@ namespace dao;
 
 use model\Atividade;
 
-class AtividadeDao extends GenericDAO
+class AtividadeDAO extends GenericDAO
 {
     protected static string $modelClass = Atividade::class;
 
