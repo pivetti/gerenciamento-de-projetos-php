@@ -31,7 +31,7 @@
         <div class="card app-card shadow-sm h-100">
             <div class="card-body">
                 <h2 class="h5">Atividades</h2>
-                <p class="text-muted">Consulte atividades vinculadas aos projetos.</p>
+                <p class="text-muted">Organize tarefas vinculadas aos projetos.</p>
                 <a class="btn btn-outline-primary" href="<?php echo $this->url('atividades'); ?>">Abrir atividades</a>
             </div>
         </div>
@@ -39,9 +39,9 @@
     <div class="col-md-6 col-xl-4">
         <div class="card app-card shadow-sm h-100">
             <div class="card-body">
-                <h2 class="h5">Riscos</h2>
-                <p class="text-muted">Registre riscos e criticidade do projeto.</p>
-                <a class="btn btn-outline-primary" href="<?php echo $this->url('riscos'); ?>">Abrir riscos</a>
+                <h2 class="h5">Custos</h2>
+                <p class="text-muted">Registre custos planejados e realizados.</p>
+                <a class="btn btn-outline-primary" href="<?php echo $this->url('custos'); ?>">Abrir custos</a>
             </div>
         </div>
     </div>

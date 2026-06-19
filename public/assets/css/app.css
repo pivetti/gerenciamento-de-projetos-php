@@ -1,0 +1,244 @@
+:root {
+    --app-bg: #f4f6f8;
+    --app-surface: #ffffff;
+    --app-border: #e4e7ec;
+    --app-muted: #667085;
+    --app-text: #182230;
+    --app-primary: #4f46e5;
+    --app-primary-dark: #3730a3;
+    --app-sidebar: #111827;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--app-text);
+    background: var(--app-bg);
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn {
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--app-primary);
+    border-color: var(--app-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--app-primary-dark);
+    border-color: var(--app-primary-dark);
+}
+
+.auth-body {
+    background:
+        radial-gradient(circle at top left, rgba(79, 70, 229, .16), transparent 32rem),
+        linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+}
+
+.auth-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.auth-card {
+    width: min(100%, 460px);
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid rgba(228, 231, 236, .9);
+    border-radius: 24px;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, .12);
+    padding: 32px;
+}
+
+.auth-title {
+    font-size: 1.9rem;
+    font-weight: 750;
+    letter-spacing: 0;
+}
+
+.auth-subtitle {
+    color: var(--app-muted);
+}
+
+.auth-brand {
+    color: var(--app-text);
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+}
+
+.app-sidebar {
+    width: 280px;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    color: #fff;
+    background: linear-gradient(180deg, #111827 0%, #1f2937 100%);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--app-primary);
+    color: #fff;
+}
+
+.sidebar-nav {
+    display: grid;
+    gap: 8px;
+}
+
+.sidebar-link {
+    color: #d1d5db;
+    padding: 11px 14px;
+    border-radius: 14px;
+    font-weight: 650;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+    color: #fff;
+    background: rgba(255, 255, 255, .12);
+}
+
+.sidebar-user {
+    margin-top: auto;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 18px;
+    display: grid;
+    gap: 2px;
+    background: rgba(255, 255, 255, .06);
+}
+
+.app-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.mobile-navbar {
+    background: var(--app-surface);
+    border-bottom: 1px solid var(--app-border);
+}
+
+.app-main {
+    width: min(100%, 1220px);
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.page-kicker {
+    margin: 0 0 4px;
+    color: var(--app-muted);
+    font-size: .78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.user-chip {
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--app-border);
+    border-radius: 999px;
+    background: var(--app-surface);
+    color: var(--app-muted);
+    font-weight: 650;
+}
+
+.app-card,
+.card {
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .06);
+}
+
+.table {
+    --bs-table-bg: transparent;
+}
+
+.table thead th {
+    color: var(--app-muted);
+    font-size: .78rem;
+    text-transform: uppercase;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    border-color: var(--app-border);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .14);
+}
+
+.alert {
+    border-radius: 16px;
+}
+
+.progress {
+    border-radius: 999px;
+}
+
+.progress-bar {
+    background: var(--app-primary);
+}
+
+@media (max-width: 991.98px) {
+    .app-main {
+        padding: 24px 16px;
+    }
+
+    .auth-card {
+        padding: 24px;
+        border-radius: 20px;
+    }
+}

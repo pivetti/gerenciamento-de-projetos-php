@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalNovoRisco">Novo risco</button>
+    <a class="btn btn-primary" href="<?php echo $this->url('riscos/create'); ?>">Novo risco</a>
 </div>
 
 <?php if ($erroListagem): ?>
@@ -10,7 +10,8 @@
     <div class="card app-card shadow-sm">
         <div class="card-body text-center py-5">
             <h2 class="h5">Nenhum risco cadastrado</h2>
-            <p class="text-muted mb-0">Registre riscos para acompanhar probabilidade, impacto e criticidade.</p>
+            <p class="text-muted mb-3">Registre riscos para acompanhar probabilidade, impacto e criticidade.</p>
+            <a class="btn btn-primary" href="<?php echo $this->url('riscos/create'); ?>">Cadastrar risco</a>
         </div>
     </div>
 <?php else: ?>
@@ -23,9 +24,10 @@
                         <th>Projeto</th>
                         <th>Categoria</th>
                         <th>Status</th>
-                        <th>Probabilidade</th>
+                        <th>Prob.</th>
                         <th>Impacto</th>
-                        <th>Criticidade</th>
+                        <th>Crit.</th>
+                        <th class="text-end">Acoes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -41,84 +43,36 @@
                             <td><?php echo $this->e($risco->getProbabilidade()); ?></td>
                             <td><?php echo $this->e($risco->getImpacto()); ?></td>
                             <td><?php echo $this->e($risco->getCriticidade()); ?></td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" href="<?php echo $this->url('riscos/edit', ['id' => $risco->getId()]); ?>">Editar</a>
+                                <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#modalExcluirRisco<?php echo $this->e($risco->getId()); ?>">Excluir</button>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </div>
-<?php endif; ?>
 
-<div class="modal fade" id="modalNovoRisco" tabindex="-1" aria-labelledby="modalNovoRiscoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form method="post" action="<?php echo $this->url('riscos/store'); ?>" class="needs-validation-js" data-validar="risco" novalidate>
-                <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="modalNovoRiscoLabel">Novo risco</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <?php if (empty($projetos)): ?>
-                        <div class="alert alert-warning">Cadastre um projeto antes de criar riscos.</div>
-                    <?php endif; ?>
-
-                    <div class="row g-3">
-                        <div class="col-md-8">
-                            <label for="titulo" class="form-label">Titulo *</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="projetoId" class="form-label">Projeto *</label>
-                            <select class="form-select" id="projetoId" name="projetoId" required>
-                                <option value="">Selecione</option>
-                                <?php foreach ($projetos as $projeto): ?>
-                                    <option value="<?php echo $this->e($projeto->getId()); ?>"><?php echo $this->e($projeto->getNome()); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="categoria" class="form-label">Categoria *</label>
-                            <select class="form-select" id="categoria" name="categoria" required>
-                                <?php foreach ($categoriaOptions as $categoria): ?>
-                                    <option value="<?php echo $this->e($categoria->value); ?>"><?php echo $this->e($categoria->value); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="status" class="form-label">Status *</label>
-                            <select class="form-select" id="status" name="status" required>
-                                <?php foreach ($statusOptions as $status): ?>
-                                    <option value="<?php echo $this->e($status->value); ?>"><?php echo $this->e($status->value); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="probabilidade" class="form-label">Prob.</label>
-                            <input type="number" class="form-control" id="probabilidade" name="probabilidade" min="1" max="5" value="1">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="impacto" class="form-label">Impacto</label>
-                            <input type="number" class="form-control" id="impacto" name="impacto" min="1" max="5" value="1">
-                        </div>
-                        <div class="col-12">
-                            <label for="descricao" class="form-label">Descricao</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="2"></textarea>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="estrategiaResposta" class="form-label">Estrategia de resposta</label>
-                            <input type="text" class="form-control" id="estrategiaResposta" name="estrategiaResposta">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="planoMitigacao" class="form-label">Plano de mitigacao</label>
-                            <input type="text" class="form-control" id="planoMitigacao" name="planoMitigacao">
-                        </div>
+    <?php foreach ($riscos as $risco): ?>
+        <div class="modal fade" id="modalExcluirRisco<?php echo $this->e($risco->getId()); ?>" tabindex="-1" aria-labelledby="modalExcluirRiscoLabel<?php echo $this->e($risco->getId()); ?>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="modalExcluirRiscoLabel<?php echo $this->e($risco->getId()); ?>">Confirmar exclusao</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        Deseja excluir o risco <?php echo $this->e($risco->getTitulo()); ?>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form method="post" action="<?php echo $this->url('riscos/delete', ['id' => $risco->getId()]); ?>">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" <?php echo empty($projetos) ? 'disabled' : ''; ?>>Salvar</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    <?php endforeach; ?>
+<?php endif; ?>

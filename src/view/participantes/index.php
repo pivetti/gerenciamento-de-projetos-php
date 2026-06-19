@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalNovoParticipante">Novo participante</button>
+    <a class="btn btn-primary" href="<?php echo $this->url('participantes/create'); ?>">Novo participante</a>
 </div>
 
 <?php if ($erroListagem): ?>
@@ -10,7 +10,8 @@
     <div class="card app-card shadow-sm">
         <div class="card-body text-center py-5">
             <h2 class="h5">Nenhum participante cadastrado</h2>
-            <p class="text-muted mb-0">Vincule usuarios existentes aos projetos cadastrados.</p>
+            <p class="text-muted mb-3">Vincule usuarios existentes aos projetos cadastrados.</p>
+            <a class="btn btn-primary" href="<?php echo $this->url('participantes/create'); ?>">Cadastrar participante</a>
         </div>
     </div>
 <?php else: ?>
@@ -24,6 +25,7 @@
                         <th>Funcao</th>
                         <th>Papel</th>
                         <th>Status</th>
+                        <th class="text-end">Acoes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,67 +40,36 @@
                                     <?php echo $participante->getAtivo() ? 'Ativo' : 'Inativo'; ?>
                                 </span>
                             </td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-primary" href="<?php echo $this->url('participantes/edit', ['id' => $participante->getId()]); ?>">Editar</a>
+                                <button class="btn btn-sm btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#modalExcluirParticipante<?php echo $this->e($participante->getId()); ?>">Excluir</button>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </div>
-<?php endif; ?>
 
-<div class="modal fade" id="modalNovoParticipante" tabindex="-1" aria-labelledby="modalNovoParticipanteLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="post" action="<?php echo $this->url('participantes/store'); ?>" class="needs-validation-js" data-validar="participante" novalidate>
-                <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="modalNovoParticipanteLabel">Novo participante</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <?php if (empty($usuarios) || empty($projetos)): ?>
-                        <div class="alert alert-warning">E necessario existir pelo menos um usuario e um projeto para cadastrar participantes.</div>
-                    <?php endif; ?>
-
-                    <div class="mb-3">
-                        <label for="usuarioId" class="form-label">Usuario *</label>
-                        <select class="form-select" id="usuarioId" name="usuarioId" required>
-                            <option value="">Selecione</option>
-                            <?php foreach ($usuarios as $usuario): ?>
-                                <option value="<?php echo $this->e($usuario->getId()); ?>"><?php echo $this->e($usuario->getNome()); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+    <?php foreach ($participantes as $participante): ?>
+        <div class="modal fade" id="modalExcluirParticipante<?php echo $this->e($participante->getId()); ?>" tabindex="-1" aria-labelledby="modalExcluirParticipanteLabel<?php echo $this->e($participante->getId()); ?>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title fs-5" id="modalExcluirParticipanteLabel<?php echo $this->e($participante->getId()); ?>">Confirmar exclusao</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="projetoId" class="form-label">Projeto *</label>
-                        <select class="form-select" id="projetoId" name="projetoId" required>
-                            <option value="">Selecione</option>
-                            <?php foreach ($projetos as $projeto): ?>
-                                <option value="<?php echo $this->e($projeto->getId()); ?>"><?php echo $this->e($projeto->getNome()); ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div class="modal-body">
+                        Deseja excluir o participante <?php echo $this->e($participante->getUsuario()->getNome()); ?> do projeto <?php echo $this->e($participante->getProjeto()->getNome()); ?>?
                     </div>
-                    <div class="mb-3">
-                        <label for="funcaoNoProjeto" class="form-label">Funcao no projeto *</label>
-                        <input type="text" class="form-control" id="funcaoNoProjeto" name="funcaoNoProjeto" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="papelAcesso" class="form-label">Papel de acesso *</label>
-                        <select class="form-select" id="papelAcesso" name="papelAcesso" required>
-                            <?php foreach ($papelOptions as $papel): ?>
-                                <option value="<?php echo $this->e($papel->value); ?>"><?php echo $this->e($papel->value); ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" checked>
-                        <label class="form-check-label" for="ativo">Ativo</label>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form method="post" action="<?php echo $this->url('participantes/delete', ['id' => $participante->getId()]); ?>">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" <?php echo (empty($usuarios) || empty($projetos)) ? 'disabled' : ''; ?>>Salvar</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    <?php endforeach; ?>
+<?php endif; ?>

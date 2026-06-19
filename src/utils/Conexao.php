@@ -19,14 +19,27 @@ class Conexao {
             $dotenv = Dotenv::createImmutable(dirname(__DIR__, 2));
             $dotenv->load();
 
-            $connection = DriverManager::getConnection([
+            $connectionParams = [
                 'driver' => $_ENV['DB_DRIVER'],
                 'host' => $_ENV['DB_HOST'],
                 'port' => $_ENV['DB_PORT'],
                 'dbname' => $_ENV['DB_NAME'],
                 'user' => $_ENV['DB_USER'],
                 'password' => $_ENV['DB_PASSWORD'],
-            ], $config);
+            ];
+
+            if (!empty($_ENV['DB_SSLMODE'])) {
+                $connectionParams['sslmode'] = $_ENV['DB_SSLMODE'];
+            }
+
+            if (($_ENV['DB_DRIVER'] ?? '') === 'pdo_pgsql' && str_contains($_ENV['DB_HOST'] ?? '', '.neon.tech')) {
+                $endpointId = explode('.', $_ENV['DB_HOST'])[0];
+
+                // Workaround para libpq antigo do XAMPP, que nao envia SNI para o Neon.
+                $connectionParams['dbname'] .= ' options=endpoint=' . $endpointId;
+            }
+
+            $connection = DriverManager::getConnection($connectionParams, $config);
 
             self::$entityManager = new EntityManager($connection, $config);
         }

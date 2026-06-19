@@ -18,9 +18,11 @@ abstract class BaseController
 
     protected function render(string $view, array $data = []): void
     {
-        $pageTitle = $data['pageTitle'] ?? 'Gerenciamento de Projetos';
+        $pageTitle = $data['pageTitle'] ?? 'ProjectHub';
         $currentRoute = $_GET['route'] ?? 'dashboard';
         $flash = $this->consumeFlash();
+        $layout = $data['layout'] ?? 'app';
+        $usuarioLogado = $_SESSION['usuario_logado'] ?? null;
 
         extract($data, EXTR_SKIP);
 
@@ -34,6 +36,11 @@ abstract class BaseController
         $url = $this->url($route, $params);
         header('Location: ' . $url);
         exit;
+    }
+
+    protected function isAuthenticated(): bool
+    {
+        return isset($_SESSION['usuario_logado']['id']);
     }
 
     protected function requirePost(): void
@@ -149,6 +156,27 @@ abstract class BaseController
         return $value;
     }
 
+    protected function nullableFloatInput(string $key, ?float $min = null): ?float
+    {
+        $raw = str_replace(',', '.', trim((string) ($_POST[$key] ?? '')));
+
+        if ($raw === '') {
+            return null;
+        }
+
+        if (!is_numeric($raw)) {
+            throw new InvalidArgumentException('Informe um valor numerico valido.');
+        }
+
+        $value = (float) $raw;
+
+        if ($min !== null && $value < $min) {
+            throw new InvalidArgumentException('Informe um valor maior ou igual a ' . $min . '.');
+        }
+
+        return $value;
+    }
+
     protected function dateInput(string $key): ?DateTime
     {
         $value = trim((string) ($_POST[$key] ?? ''));
@@ -178,6 +206,18 @@ abstract class BaseController
         }
 
         return null;
+    }
+
+    protected function enumInput(string $key, array $cases, string $default): string
+    {
+        $value = (string) ($_POST[$key] ?? $default);
+        $allowed = array_map(fn ($case) => $case->value, $cases);
+
+        if (!in_array($value, $allowed, true)) {
+            throw new InvalidArgumentException('Opcao invalida informada.');
+        }
+
+        return $value;
     }
 
     public function selected(string $expected, ?string $current): string

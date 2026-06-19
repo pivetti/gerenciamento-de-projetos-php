@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
     var forms = document.querySelectorAll('.needs-validation-js');
+    var telefones = document.querySelectorAll('input[name="telefone"]');
+
+    telefones.forEach(function (campo) {
+        campo.value = aplicarMascaraTelefone(campo.value);
+
+        campo.addEventListener('input', function () {
+            campo.value = aplicarMascaraTelefone(campo.value);
+        });
+    });
 
     forms.forEach(function (form) {
         form.addEventListener('submit', function (event) {
@@ -7,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             var valido = validarObrigatorios(form);
             valido = validarNumeros(form) && valido;
+            valido = validarEmails(form) && valido;
+            valido = validarTamanhos(form) && valido;
             valido = validarDatasProjeto(form) && valido;
 
             if (!valido) {
@@ -16,6 +27,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+function aplicarMascaraTelefone(valor) {
+    var numeros = valor.replace(/\D/g, '').slice(0, 11);
+
+    if (numeros.length <= 2) {
+        return numeros;
+    }
+
+    if (numeros.length <= 6) {
+        return '(' + numeros.slice(0, 2) + ') ' + numeros.slice(2);
+    }
+
+    if (numeros.length <= 10) {
+        return '(' + numeros.slice(0, 2) + ') ' + numeros.slice(2, 6) + '-' + numeros.slice(6);
+    }
+
+    return '(' + numeros.slice(0, 2) + ') ' + numeros.slice(2, 7) + '-' + numeros.slice(7);
+}
 
 function limparValidacao(form) {
     form.querySelectorAll('.is-invalid').forEach(function (campo) {
@@ -67,6 +96,40 @@ function validarNumeros(form) {
 
         if (maximo !== null && valor > Number(maximo)) {
             marcarInvalido(campo, 'Valor acima do maximo permitido.');
+            valido = false;
+        }
+    });
+
+    return valido;
+}
+
+function validarEmails(form) {
+    var valido = true;
+    var campos = form.querySelectorAll('input[type="email"]');
+
+    campos.forEach(function (campo) {
+        if (campo.value === '') {
+            return;
+        }
+
+        if (!campo.checkValidity()) {
+            marcarInvalido(campo, 'Informe um email valido.');
+            valido = false;
+        }
+    });
+
+    return valido;
+}
+
+function validarTamanhos(form) {
+    var valido = true;
+    var campos = form.querySelectorAll('[minlength]');
+
+    campos.forEach(function (campo) {
+        var minimo = Number(campo.getAttribute('minlength'));
+
+        if (campo.value && campo.value.length < minimo) {
+            marcarInvalido(campo, 'Informe pelo menos ' + minimo + ' caracteres.');
             valido = false;
         }
     });

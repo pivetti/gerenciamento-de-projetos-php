@@ -3,6 +3,7 @@
 namespace controller;
 
 use dao\AtividadeDAO;
+use dao\CustoDAO;
 use dao\ParticipanteDAO;
 use dao\ProjetoDAO;
 use dao\RecursoDAO;
@@ -21,6 +22,7 @@ class DashboardController extends BaseController
             'Participantes' => $this->contar(fn () => ParticipanteDAO::listar(), $houveErro),
             'Recursos' => $this->contar(fn () => RecursoDAO::listar(), $houveErro),
             'Riscos' => $this->contar(fn () => RiscoDAO::listar(), $houveErro),
+            'Custos' => $this->contar(fn () => CustoDAO::listar(), $houveErro),
         ];
 
         $this->render('dashboard/index', [
